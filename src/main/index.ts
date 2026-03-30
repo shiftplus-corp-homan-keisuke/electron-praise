@@ -12,6 +12,18 @@ import { createPraiseEvent } from './praise-factory';
 import { WebhookManager } from './webhook';
 import { resolveResourcePath } from './resource-paths';
 
+// ─────────────────────────────────────────────────────────
+// stdout / stderr への書き込みが EIO で失敗しても
+// Uncaught Exception にならないようにする
+// （起動元ターミナルが閉じられた場合などに発生する）
+// ─────────────────────────────────────────────────────────
+for (const stream of [process.stdout, process.stderr]) {
+  stream?.on?.('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EIO' || err.code === 'EPIPE') return;
+    throw err;
+  });
+}
+
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
@@ -37,6 +49,7 @@ updateElectronApp();
 
 let mainWindow: BrowserWindow | null = null;
 let trayManager: TrayManager | null = null;
+let trayAvailable = false;
 const scheduler = new Scheduler();
 const notificationManager = new NotificationManager();
 const webhookManager = new WebhookManager();
@@ -91,10 +104,16 @@ function createWindow(): void {
     );
   }
 
-  // ウィンドウの閉じるボタンはアプリ終了ではなく非表示にする
+  // トレイが使える場合はウィンドウを隠すだけ、使えない場合は終了する
   mainWindow.on('close', (e) => {
-    e.preventDefault();
-    mainWindow?.hide();
+    if (trayAvailable) {
+      e.preventDefault();
+      mainWindow?.hide();
+    } else {
+      // トレイが無い環境ではウィンドウを閉じたら終了する
+      // (そうしないとプロセスが残り続けて終了手段がなくなる)
+      quit();
+    }
   });
 }
 
@@ -113,8 +132,10 @@ function initTray(): void {
     },
   );
 
-  trayManager.init();
-  trayManager.buildContextMenu(autoLaunch.isEnabled());
+  trayAvailable = trayManager.init();
+  if (trayAvailable) {
+    trayManager.buildContextMenu(autoLaunch.isEnabled());
+  }
 }
 
 function quit(): void {

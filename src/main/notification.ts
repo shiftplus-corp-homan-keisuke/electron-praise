@@ -60,7 +60,11 @@ export class NotificationManager {
     });
 
     notification.on('failed', (_event, error) => {
-      console.error('[Notification] 通知の表示に失敗しました:', error);
+      try {
+        console.error('[Notification] 通知の表示に失敗しました:', error);
+      } catch {
+        // stderr が切断されている場合 (write EIO) は無視する
+      }
     });
 
     notification.show();

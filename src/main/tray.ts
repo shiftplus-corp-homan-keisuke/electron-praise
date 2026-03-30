@@ -13,19 +13,28 @@ export class TrayManager {
     private readonly triggerPraiseFn: () => void,
   ) {}
 
-  init(): void {
+  init(): boolean {
     const iconPath = resolveResourcePath('tray-icon.png');
 
     const icon = fs.existsSync(iconPath)
       ? iconPath
       : nativeImage.createEmpty();
 
-    this.tray = new Tray(icon);
+    try {
+      this.tray = new Tray(icon);
+    } catch {
+      // システムトレイが使えない環境 (GNOME デフォルト等)
+      this.tray = null;
+      return false;
+    }
+
     this.tray.setToolTip('はちわれぷらいず');
 
     this.tray.on('click', () => {
       this.toggleWindowFn();
     });
+
+    return true;
   }
 
   buildContextMenu(launchAtStartup: boolean): void {
