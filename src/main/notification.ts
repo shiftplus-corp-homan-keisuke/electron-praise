@@ -51,6 +51,7 @@ export class NotificationManager {
     const notification = new Notification({
       title: event.title,
       body: event.message,
+      timeoutType: 'never',
       ...(event.iconPath ? { icon: event.iconPath } : {}),
     });
 
