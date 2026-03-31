@@ -1,7 +1,7 @@
 {
   "name": "hachiware-praise",
   "productName": "はちわれぷらいず",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Windows praise app that sends random Hachiware-themed compliments",
   "main": ".vite/build/main.js",
   "repository": {
