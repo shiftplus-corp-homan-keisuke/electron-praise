@@ -207,9 +207,7 @@ async function dispatchPraise(source: PraiseSource): Promise<PraiseEvent> {
   mainWindow?.webContents.send(IPC_CHANNELS.PRAISE_FIRED, event);
 
   if (!skipNativeNotification) {
-    notificationManager.show(event, () => {
-      showWindow();
-    });
+    notificationManager.show(event, () => {});
   }
 
   void webhookManager.send(event, currentSettings);
