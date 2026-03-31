@@ -50,6 +50,7 @@ updateElectronApp();
 let mainWindow: BrowserWindow | null = null;
 let trayManager: TrayManager | null = null;
 let trayAvailable = false;
+let isQuitting = false;
 const scheduler = new Scheduler();
 const notificationManager = new NotificationManager();
 const webhookManager = new WebhookManager();
@@ -105,7 +106,9 @@ function createWindow(): void {
   }
 
   // トレイが使える場合はウィンドウを隠すだけ、使えない場合は終了する
+  // isQuitting は自動アップデートの再起動時 (quitAndInstall) に立つフラグ
   mainWindow.on('close', (e) => {
+    if (isQuitting) return;
     if (trayAvailable) {
       e.preventDefault();
       mainWindow?.hide();
@@ -225,6 +228,12 @@ app.whenReady().then(() => {
 // ウィンドウが全て閉じてもアプリを終了しない (トレイ常駐)
 app.on('window-all-closed', () => {
   // 何もしない: トレイの「終了」からのみ終了できる
+});
+
+// app.quit() / autoUpdater.quitAndInstall() 呼び出し時に立つフラグ
+// ウィンドウの close ハンドラで e.preventDefault() を抑制するために使用
+app.on('before-quit', () => {
+  isQuitting = true;
 });
 
 // macOS: Dockアイコンクリック時にウィンドウがなければ再作成
