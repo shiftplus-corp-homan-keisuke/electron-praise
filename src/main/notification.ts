@@ -6,7 +6,10 @@ import {
   NOTIFICATION_ICON_DIRECTORY,
   SUPPORTED_NOTIFICATION_ICON_EXTENSIONS,
 } from '../shared/constants';
-import { resolveResourcePath } from './resource-paths';
+import {
+  resolveExistingResourcePath,
+  resolveResourcePath,
+} from './resource-paths';
 
 export function getRandomNotificationIconPath(): string | undefined {
   const iconDirectory = resolveResourcePath(NOTIFICATION_ICON_DIRECTORY);
@@ -48,11 +51,15 @@ export class NotificationManager {
       return;
     }
 
+    const iconPath = event.iconPath && fs.existsSync(event.iconPath)
+      ? event.iconPath
+      : resolveExistingResourcePath(['icon.png']);
+
     const notification = new Notification({
       title: event.title,
       body: event.message,
       timeoutType: 'never',
-      ...(event.iconPath ? { icon: event.iconPath } : {}),
+       ...(iconPath ? { icon: iconPath } : {}),
     });
 
     notification.on('click', () => {

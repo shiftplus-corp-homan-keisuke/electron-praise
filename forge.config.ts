@@ -12,10 +12,12 @@ const config: ForgeConfig = {
     executableName: 'hachiware-praise',
     // 通知アイコン・トレイアイコンを process.resourcesPath 下に配置
     extraResource: [
+      'resources/chiikawa.png',
       'resources/icon.png',
       'resources/tray-icon.png',
       'resources/tray-icon@2x.png',
       'resources/notification-icons',
+      'resources/usagi.png',
     ],
     // Windows 向けメタデータ
     appCopyright: `Copyright © ${new Date().getFullYear()}`,

@@ -7,7 +7,7 @@ import {
   USAGI_MESSAGES,
   USAGI_TITLE,
 } from '../shared/praise-messages';
-import { resolveResourcePath } from './resource-paths';
+import { resolveExistingResourcePath } from './resource-paths';
 
 const PRAISE_TITLES = [
   'はちわれからの褒めことば',
@@ -22,6 +22,7 @@ const PRAISE_TITLES = [
 const SPECIAL_PROBABILITY = 0.05;
 /** 特殊メッセージ内でうさぎが選ばれる割合（約60%） */
 const USAGI_RATIO = 0.6;
+const DEFAULT_ICON_SEGMENTS = ['icon.png'];
 
 function pickRandom<T>(items: readonly T[] | T[]): T {
   return items[Math.floor(Math.random() * items.length)];
@@ -33,13 +34,18 @@ export function createPraiseEvent(
 ): PraiseEvent {
   if (Math.random() < SPECIAL_PROBABILITY) {
     const isUsagi = Math.random() < USAGI_RATIO;
+    const specialIconSegments = [isUsagi ? 'usagi.png' : 'chiikawa.png'];
+
     return {
       id: randomUUID(),
       title: isUsagi ? USAGI_TITLE : CHIIKAWA_TITLE,
       message: pickRandom(isUsagi ? USAGI_MESSAGES : CHIIKAWA_MESSAGES),
       firedAt: new Date().toISOString(),
       source,
-      iconPath: resolveResourcePath(isUsagi ? 'usagi.png' : 'chiikawa.png'),
+      iconPath: resolveExistingResourcePath(
+        specialIconSegments,
+        DEFAULT_ICON_SEGMENTS,
+      ),
     };
   }
 
