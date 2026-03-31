@@ -8,7 +8,7 @@ const PRAISE_TITLES = [
   'ちいさな花まるをどうぞ',
   '今日のえらいをお届け',
   'はちわれの応援タイム',
-  'きみ、かなりいい感じだよ',
+  'かなりいい感じだよッ',
 ];
 
 function pickRandom<T>(items: T[]): T {
