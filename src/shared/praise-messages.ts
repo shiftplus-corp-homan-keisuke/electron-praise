@@ -14,6 +14,37 @@ export const CHIIKAWA_MESSAGES = [
 
 export const CHIIKAWA_TITLE = 'ちいかわ';
 
+export const USAGI_MESSAGES = [
+  'ウラッ',
+  'ヤハッ',
+  'ハァ？',
+  'フゥン',
+  'イ～',
+  'ゥララララ',
+  'キャハッ',
+  'プルルル',
+  'ヤッハー',
+  'ウ～ラ～',
+  'フ～ウ～ン',
+  'ルルルルルル',
+  'ヤ・ハ・ハ',
+  'ゥゥゥッ',
+  'プルャ…',
+  'ハァッハッ',
+  'ウィーヤ',
+  'ウワァララララ',
+  'プスン',
+  'ウリリ',
+  'キャハハハッ',
+  'ゥルルルルルル',
+  'ヴゥルルルルルル',
+  'ツツウラウラ',
+  'フワリ…',
+  'ウギッッ',
+] as const;
+
+export const USAGI_TITLE = 'うさぎ';
+
 export const HACHIWARE_PRAISE_MESSAGES = [
   '今日も来られたの、ちゃんとえらいよッ。',
   'ゆっくりでも進んでるね、いい感じだよ。',

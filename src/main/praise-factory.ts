@@ -4,6 +4,8 @@ import {
   HACHIWARE_PRAISE_MESSAGES,
   CHIIKAWA_MESSAGES,
   CHIIKAWA_TITLE,
+  USAGI_MESSAGES,
+  USAGI_TITLE,
 } from '../shared/praise-messages';
 import { resolveResourcePath } from './resource-paths';
 
@@ -16,8 +18,10 @@ const PRAISE_TITLES = [
   'かなりいい感じだよッ',
 ];
 
-/** ちいかわメッセージが出現する確率（約3%） */
-const CHIIKAWA_PROBABILITY = 0.03;
+/** ちいかわ・うさぎメッセージ合わせた出現確率（約5%） */
+const SPECIAL_PROBABILITY = 0.05;
+/** 特殊メッセージ内でうさぎが選ばれる割合（約60%） */
+const USAGI_RATIO = 0.6;
 
 function pickRandom<T>(items: readonly T[] | T[]): T {
   return items[Math.floor(Math.random() * items.length)];
@@ -27,16 +31,15 @@ export function createPraiseEvent(
   source: PraiseSource,
   iconPath?: string,
 ): PraiseEvent {
-  const isChiikawa = Math.random() < CHIIKAWA_PROBABILITY;
-
-  if (isChiikawa) {
+  if (Math.random() < SPECIAL_PROBABILITY) {
+    const isUsagi = Math.random() < USAGI_RATIO;
     return {
       id: randomUUID(),
-      title: CHIIKAWA_TITLE,
-      message: pickRandom(CHIIKAWA_MESSAGES),
+      title: isUsagi ? USAGI_TITLE : CHIIKAWA_TITLE,
+      message: pickRandom(isUsagi ? USAGI_MESSAGES : CHIIKAWA_MESSAGES),
       firedAt: new Date().toISOString(),
       source,
-      iconPath: resolveResourcePath('chiikawa.png'),
+      iconPath: resolveResourcePath(isUsagi ? 'usagi.png' : 'chiikawa.png'),
     };
   }
 
