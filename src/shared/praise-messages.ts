@@ -1,3 +1,19 @@
+export const CHIIKAWA_MESSAGES = [
+  'わァ…',
+  'アッ！',
+  'エッ？',
+  'ヤダッ！！',
+  'フ！！',
+  'しゃけ',
+  'フフッ',
+  'う〜ん…',
+  'エト…',
+  'おかか',
+  'エ〜ッ？',
+] as const;
+
+export const CHIIKAWA_TITLE = 'ちいかわ';
+
 export const HACHIWARE_PRAISE_MESSAGES = [
   '今日も来られたの、ちゃんとえらいよッ。',
   'ゆっくりでも進んでるね、いい感じだよ。',
