@@ -47,6 +47,22 @@ if (process.platform === 'win32') {
 
 updateElectronApp();
 
+// ─────────────────────────────────────────────────────────
+// 多重起動防止: 既に起動済みの場合は2つ目のプロセスを終了し、
+// 既存プロセスのウィンドウを前面に表示する
+// ─────────────────────────────────────────────────────────
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (mainWindow) {
+      if (!mainWindow.isVisible()) mainWindow.show();
+      mainWindow.focus();
+    }
+  });
+}
+
 let mainWindow: BrowserWindow | null = null;
 let trayManager: TrayManager | null = null;
 let trayAvailable = false;
